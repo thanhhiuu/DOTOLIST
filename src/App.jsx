@@ -1,35 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
+  const [addValue, setAddvalue] = useState('');
+  const [list, setList] = useState([]);
+  const handleAdd = () => {
+    if (list?.some((item) => item.id === addValue?.replace(' ', ''))) {
+      alert('Bạn đã thêm trùng công việc');
+      setAddvalue('');
+    } else {
+      setList((e) => [...e, { id: addValue.replace(' ', ''), job: addValue }]);
+      setAddvalue('');
+      alert('Bạn đã thêm thành công công việc');
+    }
+  };
+  const removeAdd = (id) => {
+    console.log(id);
+    setList((pre) => pre.filter((item) => item.id !== id));
+  };
   return (
-    <>
+    <div className="flex h-screen items-center justify-center">
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+        <input
+          type="text"
+          className="outline-none h-[30px] w-[280px] border border-blue-600"
+          value={addValue}
+          onChange={(e) => setAddvalue(e.target.value)}
+        />
+        <button
+          type="button"
+          className="outline-none ml-3 border w-[70px] h-[30px] border-blue-600 bg-blue-700 text-white rounded-md"
+          onClick={handleAdd}
+        >
+          Add
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
 
-export default App
+        <div className="listText mt-5">
+          <h3>Danh sách nhập</h3>
+          <div>
+            {list?.map((item) => {
+              return (
+                <li
+                  className="flex items-center justify-between cursor-pointer"
+                  key={item.id}
+                >
+                  <div> {item.job}</div>{' '}
+                  <span onClick={() => removeAdd(item.id)}>X</span>
+                </li>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
